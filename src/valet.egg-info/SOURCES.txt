@@ -11,7 +11,13 @@ src/valet.egg-info/top_level.txt
 src/valet/cli/__init__.py
 src/valet/cli/valet_cli.py
 src/valet/gui/__init__.py
-src/valet/gui/strings.py
 src/valet/gui/valet_app.py
 src/valet/lib/__init__.py
+src/valet/lib/audio_metadata.py
+src/valet/lib/ffmpeg.py
+src/valet/lib/hashing.py
+src/valet/lib/human.py
+src/valet/lib/project.py
+src/valet/lib/project_config.py
+src/valet/lib/strings.py
 src/valet/lib/whisper.py

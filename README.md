@@ -3,11 +3,36 @@
 Valet is a pipeline management tool for transcribing and analyzing audio files
 containing speech content.
 
-## Running
+## Installing and developing
+
+Currently this requires building with a version of Python earlier than 3.13.
+The following commands may need to call something like `python3.12 -m venv venv`
+instead of calling `python3 -m venv venv` if a newer version of Python is installed.
+
+Use whichever Python version manager or software package manager is available on
+your computer to install Python 3.12.
 
 ```sh
 python3 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip
 pip install -e .
+```
+
+## Running
+
+Valet is designed to be runnable from the command line (CLI) or as a graphical
+app (GUI). Running the app requires installing and building it first (see above section).
+
+Once the app has been built, enter the virtual environment (`venv`) using the
+instructions above and then run whichever version of the program you prefer.
+
+```bash
+source venv/bin/activate
+
+# See what options are available on the command line.
+valet --help
+
+# The GUI doesn’t exist, but it does run, which is probably confusing.
+valet-gui
 ```
