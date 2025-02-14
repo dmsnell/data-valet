@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: valet
+Version: 0.0.0
+Author-email: Dennis Snell <dmsnell@xkq.io>
+Requires-Python: <3.13,>=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: openai-whisper@ git+ssh://git@github.com/cclauss/whisper-1/@fcb7755075361fd411443df54bc04c11761674d4
+
+# Valet
+
+Valet is a pipeline management tool for transcribing and analyzing audio files
+containing speech content.
+
+## Running
+
+```sh
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install -e .
+```

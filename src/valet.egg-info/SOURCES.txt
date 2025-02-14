@@ -1,0 +1,17 @@
+README.md
+pyproject.toml
+src/__init__.py
+src/valet/__init__.py
+src/valet.egg-info/PKG-INFO
+src/valet.egg-info/SOURCES.txt
+src/valet.egg-info/dependency_links.txt
+src/valet.egg-info/entry_points.txt
+src/valet.egg-info/requires.txt
+src/valet.egg-info/top_level.txt
+src/valet/cli/__init__.py
+src/valet/cli/valet_cli.py
+src/valet/gui/__init__.py
+src/valet/gui/strings.py
+src/valet/gui/valet_app.py
+src/valet/lib/__init__.py
+src/valet/lib/whisper.py

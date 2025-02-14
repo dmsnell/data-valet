@@ -1,0 +1,3 @@
+[console_scripts]
+valet = valet.cli.valet_cli:main
+valet-gui = valet.gui.valet_app:run_valet_app
