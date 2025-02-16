@@ -28,6 +28,17 @@ class ValetApp(tk.Frame):
             case 'Darwin':
                 self.replace_system_menu_on_osx()
 
+        # Check for existing project directory
+        stored_dir = self.store.get('project_directory')
+        project_path = pathlib.Path(stored_dir) if stored_dir else None
+
+        if project_path and project_path.exists():
+            self.project_directory = str(project_path)
+            # TODO: Transition to project screen UI
+            status_label = tk.Label(self.main_window, text=f"Using project: {self.project_directory}")
+            status_label.pack()
+            return  # Skip directory picker setup
+
         def choose_project_directory():
             selected_directory = filedialog.askdirectory(
                 initialdir=self.store.get('project_directory', valet.gui.platform_compat.get_user_data_directory()),
@@ -61,7 +72,7 @@ class ValetApp(tk.Frame):
         # App-name menu
         app_menu = tk.Menu(menu)
         menu.add_cascade(menu=app_menu, label=i18n.APP_TITLE)
-        app_menu.add_command(label='About {i18n.APP_TITLE}')
+        app_menu.add_command(label=f'About {i18n.APP_TITLE}')
         app_menu.add_separator()
         app_menu.add_command(label='Settings…')
         app_menu.add_separator()
