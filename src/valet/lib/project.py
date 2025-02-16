@@ -76,6 +76,13 @@ class Project:
         print(f"\x1b[90mTranscribing '\x1b[2;33m{file}\x1b[0;90m'\x1b[m")
         return whisper.transcribe(file)
 
+    def transcription_for(self, file):
+        transcriptFile = pathlib.Path(self.config.baseDirectory, self.config.transcriptionDirectory, os.path.basename(file))
+        if not transcriptFile.exists():
+            return None
+        
+        return transcriptFile.read_text()
+
     def available_sources(self):
         sourceDir = pathlib.Path(self.config.baseDirectory, self.config.sourceDirectory)
         for file in sourceDir.iterdir():

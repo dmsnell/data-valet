@@ -32,3 +32,15 @@ def duration(seconds):
         segments.append(f"{math.floor(seconds * 1000)/1000}ms")
 
     return ' '.join(segments)
+
+
+def file_size(bytes):
+    units = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+    index = 0
+    while bytes >= 1024 and index < len(units) - 1:
+        bytes /= 1024
+        index += 1
+    if index == 0:
+        return f"{int(bytes)} {units[index]}"
+    else:
+        return f"{bytes:.2f} {units[index]}"

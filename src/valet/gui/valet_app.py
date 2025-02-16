@@ -3,14 +3,15 @@ import platform
 import tkinter as tk
 from tkinter import filedialog
 
-from valet.lib import strings as i18n
+from valet.lib import project_config, project, strings as i18n
 import valet.gui.platform_compat
-from valet.gui import about_dialog, app_store
+from valet.gui import about_dialog, app_store, file_info_panel
 
 
 class ValetApp(tk.Frame):
     master: tk.Tk
     store: app_store.AppStore
+    project: project.Project
 
     def __init__(self, master):
         self.master = master
@@ -22,7 +23,7 @@ class ValetApp(tk.Frame):
         self.master.title(i18n.APP_TITLE)
         self.master.geometry('800x600')
         self.main_window = tk.Frame(master=self.master)
-        self.main_window.pack()
+        self.main_window.pack(fill="both", expand=True)
 
         self.modify_menu()
 
@@ -32,13 +33,20 @@ class ValetApp(tk.Frame):
 
         if project_path and project_path.exists():
             live_project_path = self.store.bind('project_directory')
-            status_label = tk.Label(self.main_window, text=f"Using project: {live_project_path.value}")
-            status_label.pack()
+            status_label = tk.Label(self.main_window, height=20, text=f"Using project: {live_project_path.value}")
+            status_label.pack(fill="x", expand=False)
 
             def update_label(new_path):
                 status_label.config(text=f"Using project: {new_path}")
 
             live_project_path.on_change = update_label
+
+            config = project_config.ProjectConfig(stored_dir)
+            self.project = project.Project.open_existing(config)
+
+            self.file_info_panel = file_info_panel.FileInfoPanel(self.main_window, self.project)
+            self.file_info_panel.pack(fill="both", expand=True)
+
             return  # Skip directory picker setup
 
         button = tk.Button(master=self.main_window, text="Open Directory", command=self.choose_project_directory)
