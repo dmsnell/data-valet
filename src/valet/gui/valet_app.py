@@ -41,6 +41,9 @@ class ValetApp(tk.Frame):
 
             live_project_path.on_change = update_label
 
+            transcribe_button = tk.Button(self.main_window, text="Transcribe", command=lambda: self.project.generate_transcriptions())
+            transcribe_button.pack()
+
             config = project_config.ProjectConfig(stored_dir)
             self.project = project.Project.open_existing(config)
 
