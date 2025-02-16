@@ -24,9 +24,7 @@ class ValetApp(tk.Frame):
         self.main_window = tk.Frame(master=self.master)
         self.main_window.pack()
 
-        match platform.system():
-            case 'Darwin':
-                self.replace_system_menu_on_osx()
+        self.modify_menu()
 
         # Check for existing project directory
         stored_dir = self.store.get('project_directory')
@@ -39,22 +37,21 @@ class ValetApp(tk.Frame):
             status_label.pack()
             return  # Skip directory picker setup
 
-        def choose_project_directory():
-            selected_directory = filedialog.askdirectory(
-                initialdir=self.store.get('project_directory', valet.gui.platform_compat.get_user_data_directory()),
-                title='Choose a project directory'
-            )
-            if '' != selected_directory:
-                self.project_directory = selected_directory
-                self.store.set('project_directory', selected_directory)
-
-            self.master.focus_set()
-
-        button = tk.Button(master=self.main_window, text="Choose Project Directory", command=choose_project_directory)
+        button = tk.Button(master=self.main_window, text="Open Directory", command=self.choose_project_directory)
         button.pack()
 
     def command_quit(self):
         self.event_quit(None)
+
+    def choose_project_directory(self):
+        selected_directory = filedialog.askdirectory(
+            initialdir=self.store.get('project_directory', valet.gui.platform_compat.get_user_data_directory()),
+            title='Choose a project directory'
+        )
+        if selected_directory:
+            self.project_directory = selected_directory
+            self.store.set('project_directory', selected_directory)
+        self.master.focus_set()
 
     def event_quit(self, event):
         self.quit()
@@ -62,7 +59,7 @@ class ValetApp(tk.Frame):
     def quit(self):
         self.master.destroy()
 
-    def replace_system_menu_on_osx(self):
+    def modify_menu(self):
         menu = tk.Menu()
         python_menu = tk.Menu(menu, name='apple')
         menu.add_cascade(menu=python_menu)
@@ -77,17 +74,22 @@ class ValetApp(tk.Frame):
         app_menu.add_command(label='Settings…')
         app_menu.add_separator()
         app_menu.add_command(label=f'Quit {i18n.APP_TITLE}', command=self.command_quit)
+
         # File menu
         file_menu = tk.Menu(menu)
         menu.add_cascade(menu=file_menu, label='File')
-        file_menu.add_command(label='New…')
-        file_menu.add_command(label='Open…')
+        file_menu.add_command(label='Open Folder', command=self.choose_project_directory)
+        self.master.bind('<Control-O>' if platform.system() == 'Windows' else '<Command-O>', lambda event: self.choose_project_directory())
+
         # Help menu
         help_menu = tk.Menu(menu)
         menu.add_cascade(menu=help_menu, label='Help')
         help_menu.add_command(label=f'{i18n.APP_TITLE} Help')
 
-        self.master.bind('<Command-q>', self.event_quit)
+        match platform.system():
+            case 'Darwin':
+                self.master.bind('<Command-q>', self.event_quit)
+
         self.main_window.focus()
 
 
