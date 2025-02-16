@@ -5,7 +5,7 @@ from tkinter import filedialog
 
 from valet.lib import strings as i18n
 import valet.gui.platform_compat
-from valet.gui import app_store
+from valet.gui import about_dialog, app_store
 
 
 class ValetApp(tk.Frame):
@@ -81,7 +81,7 @@ class ValetApp(tk.Frame):
         # App-name menu
         app_menu = tk.Menu(menu)
         menu.add_cascade(menu=app_menu, label=i18n.APP_TITLE)
-        app_menu.add_command(label=f'About {i18n.APP_TITLE}')
+        app_menu.add_command(label=f'About {i18n.APP_TITLE}', command=lambda: about_dialog.AboutDialog(self.master))
         app_menu.add_separator()
         app_menu.add_command(label='Settings…')
         app_menu.add_separator()
