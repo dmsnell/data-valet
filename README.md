@@ -33,6 +33,6 @@ source venv/bin/activate
 # See what options are available on the command line.
 valet --help
 
-# The GUI doesn’t exist, but it does run, which is probably confusing.
+# Run the graphical app (GUI)
 valet-gui
 ```
