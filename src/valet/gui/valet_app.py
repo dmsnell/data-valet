@@ -31,10 +31,14 @@ class ValetApp(tk.Frame):
         project_path = pathlib.Path(stored_dir) if stored_dir else None
 
         if project_path and project_path.exists():
-            self.project_directory = str(project_path)
-            # TODO: Transition to project screen UI
-            status_label = tk.Label(self.main_window, text=f"Using project: {self.project_directory}")
+            live_project_path = self.store.bind('project_directory')
+            status_label = tk.Label(self.main_window, text=f"Using project: {live_project_path.value}")
             status_label.pack()
+
+            def update_label(new_path):
+                status_label.config(text=f"Using project: {new_path}")
+
+            live_project_path.on_change = update_label
             return  # Skip directory picker setup
 
         button = tk.Button(master=self.main_window, text="Open Directory", command=self.choose_project_directory)
@@ -57,7 +61,7 @@ class ValetApp(tk.Frame):
         self.store.set('project_directory', project_path)
         
         recent_projects = set(self.store.get('recent_folders', []))
-        recent_projects.remove(project_path)
+        recent_projects.discard(project_path)
         recent_projects = [project_path] + list(recent_projects)
         self.store.set('recent_folders', recent_projects)
 
@@ -87,19 +91,28 @@ class ValetApp(tk.Frame):
         file_menu = tk.Menu(menu)
         menu.add_cascade(menu=file_menu, label='File')
         file_menu.add_command(label='Open Folder…', command=self.choose_project_directory)
-
-        recent_menu = tk.Menu(file_menu)
-        for folder in self.store.get('recent_folders', []):
-            recent_menu.add_command(
-                label=folder, 
-                command=lambda folder=folder: print(f"Open recent folder: {folder}")
-            )
-        recent_menu.add_command(
-            label=i18n.CLEAR_RECENTLY_OPENED,
-            command=lambda event: self.store.set('recent_folders', [])
-        )
-        file_menu.add_cascade(menu=recent_menu, label='Open Recent')
         self.master.bind('<Control-O>' if platform.system() == 'Windows' else '<Command-O>', lambda event: self.choose_project_directory())
+
+        live_recent_folders = self.store.bind('recent_folders', [])
+        recent_menu = tk.Menu(file_menu)
+
+        def update_recent_folders(folders):
+            recent_menu.delete(0, tk.END)
+
+            for folder in folders:
+                recent_menu.add_command(
+                    label=folder,
+                    command=lambda: self.open_project(folder)
+                )
+
+            recent_menu.add_command(
+                label=i18n.CLEAR_RECENTLY_OPENED,
+                command=lambda: self.store.set('recent_folders', [])
+            )
+
+        file_menu.add_cascade(menu=recent_menu, label='Open Recent')
+        update_recent_folders(live_recent_folders.value)
+        live_recent_folders.on_change = update_recent_folders
 
         # Help menu
         help_menu = tk.Menu(menu)
