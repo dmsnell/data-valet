@@ -5,14 +5,16 @@ from tkinter import filedialog
 
 from valet.lib import strings as i18n
 import valet.gui.platform_compat
+from valet.gui import app_store
 
 
 class ValetApp(tk.Frame):
     master: tk.Tk
-    project_directory: pathlib.Path
+    store: app_store.AppStore
 
     def __init__(self, master):
         self.master = master
+        self.store = app_store.AppStore()
         super().__init__(self.master)
         self.setup_app()
 
@@ -28,11 +30,12 @@ class ValetApp(tk.Frame):
 
         def choose_project_directory():
             selected_directory = filedialog.askdirectory(
-                initialdir=valet.gui.platform_compat.get_user_data_directory(),
+                initialdir=self.store.get('project_directory', valet.gui.platform_compat.get_user_data_directory()),
                 title='Choose a project directory'
             )
             if '' != selected_directory:
                 self.project_directory = selected_directory
+                self.store.set('project_directory', selected_directory)
 
             self.master.focus_set()
 
