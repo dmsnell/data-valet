@@ -49,9 +49,17 @@ class ValetApp(tk.Frame):
             title='Choose a project directory'
         )
         if selected_directory:
-            self.project_directory = selected_directory
-            self.store.set('project_directory', selected_directory)
+            self.open_project(selected_directory)
+
         self.master.focus_set()
+
+    def open_project(self, project_path):
+        self.store.set('project_directory', project_path)
+        
+        recent_projects = set(self.store.get('recent_folders', []))
+        recent_projects.remove(project_path)
+        recent_projects = [project_path] + list(recent_projects)
+        self.store.set('recent_folders', recent_projects)
 
     def event_quit(self, event):
         self.quit()
@@ -78,7 +86,19 @@ class ValetApp(tk.Frame):
         # File menu
         file_menu = tk.Menu(menu)
         menu.add_cascade(menu=file_menu, label='File')
-        file_menu.add_command(label='Open Folder', command=self.choose_project_directory)
+        file_menu.add_command(label='Open Folder…', command=self.choose_project_directory)
+
+        recent_menu = tk.Menu(file_menu)
+        for folder in self.store.get('recent_folders', []):
+            recent_menu.add_command(
+                label=folder, 
+                command=lambda folder=folder: print(f"Open recent folder: {folder}")
+            )
+        recent_menu.add_command(
+            label=i18n.CLEAR_RECENTLY_OPENED,
+            command=lambda event: self.store.set('recent_folders', [])
+        )
+        file_menu.add_cascade(menu=recent_menu, label='Open Recent')
         self.master.bind('<Control-O>' if platform.system() == 'Windows' else '<Command-O>', lambda event: self.choose_project_directory())
 
         # Help menu
