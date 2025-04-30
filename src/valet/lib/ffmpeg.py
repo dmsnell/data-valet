@@ -16,6 +16,27 @@ def get_binary_path():
             return None
 
 
+def convert_to_wav(filepath, wav_path):
+    """
+    :param filepath: pathlib object pointing to audio file
+    :param wav_path: pathlib object for saving WAV conversion
+    """
+    ffmpeg_path = get_binary_path()
+    if not ffmpeg_path:
+        raise FileNotFoundError("ffmpeg not found in system PATH")
+
+    subprocess.run(
+        [
+            str(ffmpeg_path),
+            '-y',  # Overwrite output file without asking
+            '-i', str(filepath),
+            '-f', 'wav',
+            '-loglevel', 'error',  # Only show errors
+            str(wav_path)
+        ],
+        check=True
+    )
+
 def get_meta_for_file(filepath):
     """
     :param pathlib.Path filepath:
