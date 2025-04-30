@@ -11,6 +11,12 @@ src/valet.egg-info/top_level.txt
 src/valet/cli/__init__.py
 src/valet/cli/valet_cli.py
 src/valet/gui/__init__.py
+src/valet/gui/about_dialog.py
+src/valet/gui/app_store.py
+src/valet/gui/appdirs.py
+src/valet/gui/file_info_panel.py
+src/valet/gui/notifications.py
+src/valet/gui/platform_compat.py
 src/valet/gui/valet_app.py
 src/valet/lib/__init__.py
 src/valet/lib/audio_metadata.py

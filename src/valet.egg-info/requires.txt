@@ -1,1 +1,1 @@
-openai-whisper@ git+ssh://git@github.com/cclauss/whisper-1/@fcb7755075361fd411443df54bc04c11761674d4
+openai-whisper

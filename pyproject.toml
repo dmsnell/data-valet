@@ -11,9 +11,7 @@ readme = "README.md"
 requires-python = ">=3.12, < 3.13"
 dynamic = ["version"]
 dependencies = [
-    # The main project doesn’t build with pyproject.toml due to a “pkg_resources”
-    # deprecation error. This PR (openai/whisper#2435) moves to a pyproject.toml setup.
-    "openai-whisper @ git+ssh://git@github.com/cclauss/whisper-1/@fcb7755075361fd411443df54bc04c11761674d4"
+    "openai-whisper"
 ]
 
 [tool.setuptools_scm]
